@@ -1,0 +1,28 @@
+{
+  "name": "food-delivery-web-app",
+  "version": "1.0.0",
+  "description": "This is a food delivery web application that allows users to browse menus, place orders, and track deliveries in real-time. The app is built using modern web technologies to provide a seamless user experience.",
+  "homepage": "https://github.com/sahil25123/Food-Delivery-Web-App#readme",
+  "bugs": {
+    "url": "https://github.com/sahil25123/Food-Delivery-Web-App/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahil25123/Food-Delivery-Web-App.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.1"
+  }
+}
