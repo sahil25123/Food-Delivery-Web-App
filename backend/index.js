@@ -1,10 +1,14 @@
-import express from "express";
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: "./.env" });
+import express from "express";
+import connectDB from "./config/db.js";
 
 const port=process.env.PORT || 9000;
 
+
 const app = express();
+
+connectDB()
 
 app.get("/" ,(req, res)=>{
     res.send("This is the test page ")
