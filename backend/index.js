@@ -8,12 +8,13 @@ const port=process.env.PORT || 9000;
 
 const app = express();
 
-connectDB()
+
 
 app.get("/" ,(req, res)=>{
     res.send("This is the test page ")
 })
 
 app.listen(port ,(req,res)=>{
+    connectDB()
     console.log(`Server is Running on Port ${port}`);
 } )
