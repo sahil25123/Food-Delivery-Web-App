@@ -20,12 +20,11 @@ const userSchema = new mongoose.Schema({
     } , 
     role :{ 
         type : String  , 
-        enum : ["user" , "food_patner" ,"owner" ]
-
+        enum : ["user" , "food_patner" ,"owner" ],
+        default: 'user'
     }
-
-
-},{ timestamps : true})
+},
+{timestamps : true})
 
 const User = mongoose.model("User" , userSchema);
 
