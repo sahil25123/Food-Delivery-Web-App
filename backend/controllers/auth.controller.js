@@ -2,49 +2,71 @@ import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import genToken from "../utils/token.js"
 
- export const register=async (req , res) =>{
+export const register = async (req, res) => {
     try {
-        req.body = {FullName , email , password , mobile  , role}
+        // Correct way to destructure from req.body
+        const { fullName, email, password, mobile, role } = req.body;
 
-        const user = await User.findOne({email})
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
 
-        if(user){
-            return res.status(400).json({message : "User Already Exists"})
+        if (existingUser) {
+            return res.status(400).json({ message: "User Already Exists" });
         }
 
-        if(password.length <6){
-            return res.status(400).json({message : "Password Minimum must be 6 Characters"})
+        // Validate password length
+        if (password.length < 6) {
+            return res.status(400).json({ message: "Password must be at least 6 characters" });
         }
 
-        if(mobile!=10){
-            return res.status(400).json({message : "Must be of 10 digits"})
-
+        // Validate mobile number length and format
+        if (!mobile || mobile.toString().length !== 10) {
+            return res.status(400).json({ message: "Mobile number must be 10 digits" });
         }
 
-        const hashedPassword = await bcrypt.hash(password , 10);
-        user = await User.create({
-            fullName ,
-            email , 
-            role, 
-            mobile , 
-            password : hashedPassword
-        })
-        const token = await genToken(user._id)
-        res.cookie("Token",
-            token,
-            {secure : false,
-            sameSite  : "strict",
-            maxAge: 7*24*60*60*1000,
-            httpOnly : true
-            })
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Create new user
+        const newUser = await User.create({
+            fullName,
+            email,
+            role: role || 'user', // Default role if not provided
+            mobile,
+            password: hashedPassword
+        });
 
-            return res.status(201).json(user);
+        // Generate token (assuming genToken returns a token)
+        const token = await genToken(newUser._id);
+        
+        // Set cookie
+        res.cookie("token", token, {
+            secure: process.env.NODE_ENV === 'production', // Use secure in production
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            httpOnly: true
+        });
 
+        // Return response without password
+        const userResponse = {
+            _id: newUser._id,
+            fullName: newUser.fullName,
+            email: newUser.email,
+            role: newUser.role,
+            mobile: newUser.mobile,
+            createdAt: newUser.createdAt
+        };
+
+        return res.status(201).json({
+            message: "User registered successfully",
+            user: userResponse,
+            token: token // Optional: also send token in response
+        });
+
+    } catch (error) {
+        console.error("Registration error:", error);
+        return res.status(500).json({ 
+            message: `Error in registration: ${error.message}` 
+        });
     }
-    catch(e){
-        console.log(e)
-        return res.status(500).json({message : `Error in the Registration : ${e.message}`})
-
-    }
-
 }
