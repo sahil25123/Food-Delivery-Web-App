@@ -70,3 +70,50 @@ export const register = async (req, res) => {
         });
     }
 }
+
+export const login =async(req,res)=>{
+
+
+    try { 
+        const {email , password} = req.body ;
+
+    const user = await User.findOne({email});
+
+    if(!user){
+        return res.status(400).json({message :"User does not exist"})
+    };
+    const isMatch = await bcrypt.compare(password ,user.password)
+    if(!isMatch){
+        return res.status(400).json({message : "Incorrect Password"})
+    }
+    // Generate token (assuming genToken returns a token)
+        const token = await genToken(newUser._id);
+        
+        // Set cookie
+        res.cookie("token", token, {
+            secure: process.env.NODE_ENV === 'production', // Use secure in production
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            httpOnly: true
+        });
+
+    }
+    catch(e){
+        return res.status(500).json({ message : `Login in Error : ${e}`})
+    }
+    
+}
+
+
+export const logout= async (req, res)=>{
+
+    try{
+        res.clearCookie("token")
+        return res.status(200).json({message  : "Logout Scuccessfully"})
+
+    }
+    catch(e){
+    return res.status(500).json({ message : `Login in Error : ${e}`})
+
+    }
+}
