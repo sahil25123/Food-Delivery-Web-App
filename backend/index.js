@@ -4,6 +4,7 @@ import express from "express";
 import connectDB from "./config/db.js";
 import cookieParser from 'cookie-parser';
 import authRouter from './routes/auth.routes.js';
+import cors from "cors";
 
 const port=process.env.PORT || 9000;
 
