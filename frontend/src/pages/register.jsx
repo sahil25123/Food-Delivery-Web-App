@@ -63,7 +63,6 @@ const Register = () => {
         <button className="w-full  mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer" onClick={handleSignUp} disabled={loading}>{loading?<ClipLoader size={20} color='white'/>:"Sign Up"}</button>
 
         {error && <p className='text-red-500 text-center my-2'>*{error}</p>}
-
         <button className='w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 transition duration-200 border-gray-400 hover:bg-gray-100 cursor-pointer' onClick={handleGoogleAuth}>
           <FcGoogle size={20}/>
           <span>Sign Up with Google</span>
